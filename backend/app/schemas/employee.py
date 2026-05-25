@@ -30,16 +30,22 @@ class EmployeeCreate(EmployeeBase):
     pass
 
 
-class EmployeeUpdate(BaseModel):
-    full_name: Optional[constr(min_length=1, max_length=200)]
-    email: Optional[EmailStr]
-    job_title: Optional[constr(min_length=1, max_length=150)]
-    department: Optional[constr(min_length=1, max_length=100)]
-    country: Optional[constr(min_length=1, max_length=100)]
-    salary: Optional[condecimal(gt=0, max_digits=12, decimal_places=2)]
-    currency: Optional[CurrencyCode]
-    employment_type: Optional[EmploymentType]
-    hired_at: Optional[date]
+class EmployeeDiff(BaseModel):
+    full_name: Optional[constr(min_length=1, max_length=200)] = None
+    email: Optional[EmailStr] = None
+    job_title: Optional[constr(min_length=1, max_length=150)] = None
+    department: Optional[constr(min_length=1, max_length=100)] = None
+    country: Optional[constr(min_length=1, max_length=100)] = None
+    salary: Optional[condecimal(gt=0, max_digits=12, decimal_places=2)] = None
+    currency: Optional[CurrencyCode] = None
+    employment_type: Optional[EmploymentType] = None
+    hired_at: Optional[date] = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class EmployeeUpdate(EmployeeDiff):
+    pass
 
 
 class EmployeeRead(EmployeeBase):
