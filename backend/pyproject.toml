@@ -23,3 +23,6 @@ test = [
   "pytest-cov>=4.1",
   "httpx>=0.28",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

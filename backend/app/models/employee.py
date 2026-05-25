@@ -1,18 +1,12 @@
 """ORM model for employee data."""
 
-import enum
 from datetime import datetime
 from uuid import uuid4
 
 from sqlalchemy import Boolean, Column, Date, DateTime, Enum, Numeric, String, func
 
 from ..core.database import Base
-
-
-class EmploymentType(str, enum.Enum):
-    FULL_TIME = "FULL_TIME"
-    PART_TIME = "PART_TIME"
-    CONTRACT = "CONTRACT"
+from ..enums import EmploymentType
 
 
 class Employee(Base):
