@@ -1,0 +1,25 @@
+[project]
+name = "sma_incubyte"
+version = "0.1.0"
+description = "SMA Incubyte Python package."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [ { name = "ai-dewanand" } ]
+dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/ai-dewanand/SMA_incubyte"
+
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = { find = { where = ["src"] } }
+package-dir = { "" = "src" }
