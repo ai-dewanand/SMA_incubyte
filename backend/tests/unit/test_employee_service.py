@@ -1,8 +1,19 @@
 import inspect
 from datetime import date
+import pytest
+from unittest.mock import AsyncMock
 
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
 from app.services.employee_service import EmployeeService
+
+@pytest.fixture
+def mock_repo():
+    return AsyncMock()          # fake repository, no DB needed
+
+
+@pytest.fixture
+def employee_service(mock_repo):
+    return EmployeeService(repository=mock_repo)
 
 
 def make_employee_payload() -> dict:
