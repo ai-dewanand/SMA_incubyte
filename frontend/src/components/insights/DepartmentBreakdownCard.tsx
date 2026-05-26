@@ -1,7 +1,10 @@
+import { InsightCard } from './InsightCard'
+
 export function DepartmentBreakdownCard({
   loading,
   error,
   data,
+  onRetry,
 }: {
   loading: boolean
   error: string | null
@@ -9,57 +12,46 @@ export function DepartmentBreakdownCard({
     department: string
     avg: number
   }>
+  onRetry?: () => void
 }) {
   if (!data && !loading && !error) {
     return null
   }
 
   const formatCurrency = (num: number) => `$${(num / 1000).toFixed(1)}k`
-  const topDept = data ? data.sort((a, b) => b.avg - a.avg)[0] : null
+  const rows = data ? [...data].sort((a, b) => b.avg - a.avg) : []
+  const topDept = rows[0]
+  const maxAvg = topDept?.avg ?? 1
 
   return (
-    <article className="card card-stat">
-      <h3>Department Breakdown</h3>
-      {error ? (
-        <p style={{ color: '#e74c3c' }}>Error: {error}</p>
-      ) : loading ? (
-        <>
-          <div className="skeleton" style={{ height: '2rem', marginBottom: '0.5rem' }} />
-          <div className="skeleton" style={{ height: '1rem', width: '70%' }} />
-        </>
+    <InsightCard
+      title="Department Breakdown"
+      description={topDept ? `Top: ${topDept.department}` : undefined}
+      loading={loading}
+      error={error}
+      onRetry={onRetry}
+      scrollable
+    >
+      {rows.length > 0 ? (
+        <ul className="insight-bar-list">
+          {rows.map((department) => (
+            <li key={department.department} className="insight-bar-item">
+              <div className="insight-bar-meta">
+                <span className="insight-bar-label">{department.department}</span>
+                <span className="insight-bar-value">{formatCurrency(department.avg)}</span>
+              </div>
+              <div className="insight-bar-track insight-bar-track-alt" aria-hidden="true">
+                <div
+                  className="insight-bar-fill"
+                  style={{ width: `${(department.avg / maxAvg) * 100}%` }}
+                />
+              </div>
+            </li>
+          ))}
+        </ul>
       ) : (
-        <>
-          <p className="stat-value">{data?.length ?? 0} Departments</p>
-          {topDept && <p>Highest: {topDept.department} ({formatCurrency(topDept.avg)})</p>}
-          {data && (
-            <table
-              style={{
-                marginTop: '1rem',
-                width: '100%',
-                fontSize: '0.85rem',
-                borderCollapse: 'collapse',
-              }}
-            >
-              <thead>
-                <tr style={{ borderBottom: '1px solid #e0e0e0' }}>
-                  <th style={{ textAlign: 'left', paddingBottom: '0.5rem' }}>Department</th>
-                  <th style={{ textAlign: 'right', paddingBottom: '0.5rem' }}>Avg Salary</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.slice(0, 5).map((d) => (
-                  <tr key={d.department} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                    <td style={{ padding: '0.5rem 0' }}>{d.department}</td>
-                    <td style={{ textAlign: 'right', padding: '0.5rem 0' }}>
-                      {formatCurrency(d.avg)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </>
+        <p className="insight-empty">No department data available.</p>
       )}
-    </article>
+    </InsightCard>
   )
 }

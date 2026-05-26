@@ -12,13 +12,13 @@ export default function HomePage() {
       <section className="grid cards">
         <article className="card">
           <h2>Employee Directory</h2>
-          <p>View employee records, job titles, departments, and salary details.</p>
+          <p>Search, filter, and manage employee records with pagination and inline actions.</p>
           <a href="/employees">Open employee list →</a>
         </article>
 
         <article className="card">
           <h2>Insights</h2>
-          <p>Browse salary statistics, top earners, department breakdowns, and headcount.</p>
+          <p>Review salary stats, headcount, top earners, and department breakdowns.</p>
           <a href="/insights">Open insights →</a>
         </article>
       </section>

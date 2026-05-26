@@ -1,3 +1,6 @@
+import type { ReactNode } from 'react'
+import { Spinner } from '../ui/Spinner'
+
 export function InsightCard({
   title,
   value,
@@ -5,48 +8,76 @@ export function InsightCard({
   details,
   loading,
   error,
+  onRetry,
+  className,
+  children,
+  scrollable = false,
 }: {
   title: string
-  value: string | number
+  value?: string | number
   description?: string
   details?: Array<{ label: string; text: string }>
   loading?: boolean
   error?: string | null
+  onRetry?: () => void
+  className?: string
+  children?: ReactNode
+  scrollable?: boolean
 }) {
+  const cardClass = ['insight-card', className].filter(Boolean).join(' ')
+
   if (error) {
     return (
-      <article className="card card-stat card-error">
-        <h3>{title}</h3>
-        <p style={{ color: '#e74c3c' }}>Error: {error}</p>
+      <article className={`${cardClass} insight-card-error`}>
+        <header className="insight-card-header">
+          <h3>{title}</h3>
+        </header>
+        <p className="insight-error-text">{error}</p>
+        {onRetry ? (
+          <button type="button" className="button-secondary button-sm" onClick={onRetry}>
+            Retry
+          </button>
+        ) : null}
       </article>
     )
   }
 
   if (loading) {
     return (
-      <article className="card card-stat card-loading">
-        <h3>{title}</h3>
-        <div className="skeleton" style={{ height: '2rem', marginBottom: '0.5rem' }} />
-        <div className="skeleton" style={{ height: '1rem', width: '70%' }} />
+      <article className={`${cardClass} insight-card-loading`} aria-busy="true">
+        <header className="insight-card-header">
+          <h3>{title}</h3>
+        </header>
+        <Spinner label="Loading…" size="sm" />
       </article>
     )
   }
 
   return (
-    <article className="card card-stat">
-      <h3>{title}</h3>
-      <p className="stat-value">{value}</p>
-      {description && <p>{description}</p>}
-      {details && (
-        <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
+    <article className={cardClass}>
+      <header className="insight-card-header">
+        <h3>{title}</h3>
+        {description ? <p className="insight-card-subtitle">{description}</p> : null}
+      </header>
+
+      {value !== undefined ? <p className="insight-stat-value">{value}</p> : null}
+
+      {details && details.length > 0 ? (
+        <dl className="insight-kpi-row">
           {details.map((detail) => (
-            <div key={detail.label} style={{ marginBottom: '0.5rem' }}>
-              <strong>{detail.label}:</strong> {detail.text}
+            <div key={detail.label} className="insight-kpi-item">
+              <dt>{detail.label}</dt>
+              <dd>{detail.text}</dd>
             </div>
           ))}
+        </dl>
+      ) : null}
+
+      {children ? (
+        <div className={scrollable ? 'insight-card-body insight-scroll' : 'insight-card-body'}>
+          {children}
         </div>
-      )}
+      ) : null}
     </article>
   )
 }
-

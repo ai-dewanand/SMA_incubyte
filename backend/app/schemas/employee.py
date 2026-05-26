@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, constr, condecimal
 
@@ -55,3 +55,10 @@ class EmployeeRead(EmployeeBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class EmployeeListResponse(BaseModel):
+    items: List[EmployeeRead]
+    total: int
+    limit: int
+    offset: int

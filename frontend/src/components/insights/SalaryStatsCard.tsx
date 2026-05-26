@@ -4,6 +4,7 @@ export function SalaryStatsCard({
   loading,
   error,
   data,
+  onRetry,
 }: {
   loading: boolean
   error: string | null
@@ -12,6 +13,7 @@ export function SalaryStatsCard({
     max: number
     avg: number
   }
+  onRetry?: () => void
 }) {
   const formatCurrency = (num: number) => `$${(num / 1000).toFixed(1)}k`
 
@@ -36,6 +38,7 @@ export function SalaryStatsCard({
       }
       loading={loading}
       error={error}
+      onRetry={onRetry}
     />
   )
 }
