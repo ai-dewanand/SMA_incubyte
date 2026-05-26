@@ -212,3 +212,219 @@ a {
   padding: 3rem 1rem;
   color: #64748b;
 }
+
+.form-panel {
+  max-width: 600px;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  margin: 0 0 0.5rem;
+}
+
+.form-header p {
+  margin: 0;
+  color: #475569;
+}
+
+.form-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-error p {
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.form-grid input,
+.form-grid select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  outline: none;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: #0f766e;
+}
+
+.field-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.button-primary,
+.button-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.button-primary {
+  background: #0f766e;
+  color: white;
+}
+
+.button-primary:hover:not(:disabled) {
+  background: #0d5a57;
+}
+
+.button-secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-primary,
+.button-secondary,
+.button-danger {
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.button-primary {
+  background: #0f766e;
+  color: white;
+}
+
+.button-secondary {
+  background: white;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.button-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.button-primary:hover,
+.button-secondary:hover,
+.button-danger:hover {
+  opacity: 0.95;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.form-panel {
+  margin-bottom: 1.5rem;
+}
+
+.form-header {
+  margin-bottom: 1.25rem;
+}
+
+.form-header h2 {
+  margin: 0 0 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: white;
+  outline: none;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: #0f766e;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.action-message,
+.action-error {
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+}
+
+.action-message {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #d1fae5;
+}
+
+.action-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}

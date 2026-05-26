@@ -3,6 +3,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import AsyncSessionLocal, get_db
@@ -22,9 +23,15 @@ async def list_employees(limit: int = 100, offset: int = 0, db: AsyncSession = D
 
 @router.post("", response_model=EmployeeRead, status_code=status.HTTP_201_CREATED)
 async def create_employee(employee_create: EmployeeCreate, db: AsyncSession = Depends(get_db)):
-	service = EmployeeService()
-	employee = await service.create_employee(db, employee_create)
-	return employee
+	try:
+		service = EmployeeService()
+		employee = await service.create_employee(db, employee_create)
+		return employee
+	except IntegrityError as e:
+		raise HTTPException(
+			status_code=status.HTTP_400_BAD_REQUEST,
+			detail="Email already exists. Please use a different email address.",
+		) from e
 
 
 @router.get("/{employee_id}", response_model=EmployeeRead)
@@ -38,11 +45,17 @@ async def get_employee(employee_id: str, db: AsyncSession = Depends(get_db)):
 
 @router.patch("/{employee_id}", response_model=EmployeeRead)
 async def update_employee(employee_id: str, employee_update: EmployeeUpdate, db: AsyncSession = Depends(get_db)):
-	service = EmployeeService()
-	employee = await service.update_employee(db, employee_id, employee_update)
-	if not employee:
-		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-	return employee
+	try:
+		service = EmployeeService()
+		employee = await service.update_employee(db, employee_id, employee_update)
+		if not employee:
+			raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+		return employee
+	except IntegrityError as e:
+		raise HTTPException(
+			status_code=status.HTTP_400_BAD_REQUEST,
+			detail="Email already exists. Please use a different email address.",
+		) from e
 
 
 @router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)

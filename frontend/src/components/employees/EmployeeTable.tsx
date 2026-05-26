@@ -10,11 +10,20 @@ export type EmployeeRecord = {
   department: string
   country: string
   salary: string
+  currency?: string
+  employment_type?: string
+  hired_at?: string
 }
 
 const PAGE_SIZE = 8
 
-export function EmployeeTable({ employees }: { employees: EmployeeRecord[] }) {
+type EmployeeTableProps = {
+  employees: EmployeeRecord[]
+  onEdit: (employee: EmployeeRecord) => void
+  onDelete: (employeeId: string) => void
+}
+
+export function EmployeeTable({ employees, onEdit, onDelete }: EmployeeTableProps) {
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
 
@@ -76,6 +85,7 @@ export function EmployeeTable({ employees }: { employees: EmployeeRecord[] }) {
             <th>Department</th>
             <th>Country</th>
             <th>Salary</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -88,11 +98,19 @@ export function EmployeeTable({ employees }: { employees: EmployeeRecord[] }) {
                 <td>{employee.department}</td>
                 <td>{employee.country}</td>
                 <td>{employee.salary}</td>
+                <td className="actions-cell">
+                  <button type="button" className="button-secondary" onClick={() => onEdit(employee)}>
+                    Edit
+                  </button>
+                  <button type="button" className="button-danger" onClick={() => onDelete(employee.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={6} className="empty-state">
+              <td colSpan={7} className="empty-state">
                 No employees match your search.
               </td>
             </tr>
