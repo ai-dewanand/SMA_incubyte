@@ -15,7 +15,8 @@ export function SalaryStatsCard({
   }
   onRetry?: () => void
 }) {
-  const formatCurrency = (num: number) => `$${(num / 1000).toFixed(1)}k`
+  const formatCurrency = (num: number) =>
+    num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
 
   if (!data && !loading && !error) {
     return null

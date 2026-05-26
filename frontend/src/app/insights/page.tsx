@@ -14,38 +14,18 @@ import {
   fetchTopEarners,
   fetchSalaryDistribution,
 } from '../../lib/api'
-
-interface SalaryStats {
-  min: number
-  max: number
-  avg: number
-}
-
-interface HeadcountData {
-  country: string
-  count: number
-}
-
-interface DepartmentData {
-  department: string
-  avg: number
-}
-
-interface TopEarner {
-  id: string
-  full_name: string
-  salary: number
-}
-
-interface SalaryBucket {
-  range: [number, number]
-  count: number
-}
-
-interface SalaryDistribution {
-  buckets: SalaryBucket[]
-  total: number
-}
+import {
+  normalizeDepartments,
+  normalizeHeadcount,
+  normalizeSalaryDistribution,
+  normalizeSalaryStats,
+  normalizeTopEarners,
+  type DepartmentRow,
+  type HeadcountRow,
+  type SalaryDistribution,
+  type SalaryStats,
+  type TopEarnerRow,
+} from '../../lib/insights'
 
 type LoadingState = {
   stats: boolean
@@ -81,9 +61,9 @@ const initialErrors: ErrorState = {
 
 export default function InsightsPage() {
   const [salaryStats, setSalaryStats] = useState<SalaryStats | null>(null)
-  const [headcount, setHeadcount] = useState<HeadcountData[]>([])
-  const [departments, setDepartments] = useState<DepartmentData[]>([])
-  const [topEarners, setTopEarners] = useState<TopEarner[]>([])
+  const [headcount, setHeadcount] = useState<HeadcountRow[]>([])
+  const [departments, setDepartments] = useState<DepartmentRow[]>([])
+  const [topEarners, setTopEarners] = useState<TopEarnerRow[]>([])
   const [distribution, setDistribution] = useState<SalaryDistribution | null>(null)
 
   const [loading, setLoading] = useState<LoadingState>(initialLoading)
@@ -94,7 +74,7 @@ export default function InsightsPage() {
     setLoading((current) => ({ ...current, stats: true }))
     try {
       const data = await fetchSalaryStats()
-      setSalaryStats(data)
+      setSalaryStats(normalizeSalaryStats(data))
       setErrors((current) => ({ ...current, stats: null }))
     } catch (error) {
       setErrors((current) => ({
@@ -110,7 +90,7 @@ export default function InsightsPage() {
     setLoading((current) => ({ ...current, headcount: true }))
     try {
       const data = await fetchHeadcount()
-      setHeadcount(data)
+      setHeadcount(normalizeHeadcount(data))
       setErrors((current) => ({ ...current, headcount: null }))
     } catch (error) {
       setErrors((current) => ({
@@ -126,7 +106,7 @@ export default function InsightsPage() {
     setLoading((current) => ({ ...current, departments: true }))
     try {
       const data = await fetchDepartmentBreakdown()
-      setDepartments(data)
+      setDepartments(normalizeDepartments(data))
       setErrors((current) => ({ ...current, departments: null }))
     } catch (error) {
       setErrors((current) => ({
@@ -142,7 +122,7 @@ export default function InsightsPage() {
     setLoading((current) => ({ ...current, topEarners: true }))
     try {
       const data = await fetchTopEarners(10)
-      setTopEarners(data)
+      setTopEarners(normalizeTopEarners(data))
       setErrors((current) => ({ ...current, topEarners: null }))
     } catch (error) {
       setErrors((current) => ({
@@ -158,7 +138,7 @@ export default function InsightsPage() {
     setLoading((current) => ({ ...current, distribution: true }))
     try {
       const data = await fetchSalaryDistribution(10)
-      setDistribution(data)
+      setDistribution(normalizeSalaryDistribution(data))
       setErrors((current) => ({ ...current, distribution: null }))
     } catch (error) {
       setErrors((current) => ({
@@ -197,7 +177,7 @@ export default function InsightsPage() {
   }, [hasErrors, headcount.length, isLoading, salaryStats])
 
   return (
-    <main>
+    <main className="insights-page">
       <section className="page-header">
         <div>
           <h1>Insights</h1>
@@ -216,37 +196,47 @@ export default function InsightsPage() {
         </Alert>
       ) : null}
 
-      <section className="grid cards">
-        <SalaryStatsCard
-          loading={loading.stats}
-          error={errors.stats}
-          data={salaryStats ?? undefined}
-          onRetry={loadSalaryStats}
-        />
-        <HeadcountCard
-          loading={loading.headcount}
-          error={errors.headcount}
-          data={headcount}
-          onRetry={loadHeadcount}
-        />
-        <DepartmentBreakdownCard
-          loading={loading.departments}
-          error={errors.departments}
-          data={departments}
-          onRetry={loadDepartments}
-        />
-        <TopEarnersCard
-          loading={loading.topEarners}
-          error={errors.topEarners}
-          data={topEarners}
-          onRetry={loadTopEarners}
-        />
-        <SalaryDistributionCard
-          loading={loading.distribution}
-          error={errors.distribution}
-          data={distribution ?? undefined}
-          onRetry={loadDistribution}
-        />
+      <section className="insights-dashboard" aria-label="Workforce insights">
+        <div className="insights-kpi">
+          <SalaryStatsCard
+            loading={loading.stats}
+            error={errors.stats}
+            data={salaryStats ?? undefined}
+            onRetry={loadSalaryStats}
+          />
+        </div>
+        <div className="insights-kpi">
+          <HeadcountCard
+            loading={loading.headcount}
+            error={errors.headcount}
+            data={headcount}
+            onRetry={loadHeadcount}
+          />
+        </div>
+        <div className="insights-panel">
+          <TopEarnersCard
+            loading={loading.topEarners}
+            error={errors.topEarners}
+            data={topEarners}
+            onRetry={loadTopEarners}
+          />
+        </div>
+        <div className="insights-panel">
+          <DepartmentBreakdownCard
+            loading={loading.departments}
+            error={errors.departments}
+            data={departments}
+            onRetry={loadDepartments}
+          />
+        </div>
+        <div className="insights-chart">
+          <SalaryDistributionCard
+            loading={loading.distribution}
+            error={errors.distribution}
+            data={distribution ?? undefined}
+            onRetry={loadDistribution}
+          />
+        </div>
       </section>
     </main>
   )

@@ -6,7 +6,7 @@ from app.api.v1.insights import router as insights_router
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="SMA Incubyte Salary Management")
+    app = FastAPI(title="Incubyte Salary Management")
 
     # Simple CORS for development/demo purposes
     app.add_middleware(

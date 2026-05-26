@@ -2,7 +2,7 @@ export default function HomePage() {
   return (
     <main>
       <section className="hero">
-        <h1>SMA Incubyte Salary Management</h1>
+        <h1>Incubyte Salary Management</h1>
         <p>
           A minimal HR insights dashboard for employee salary data, department metrics,
           and earnings analytics.

@@ -22,23 +22,26 @@ export function SalaryDistributionCard({
   }
 
   const formatCurrency = (num: number) => `$${(num / 1000).toFixed(0)}k`
-  const maxCount = data ? Math.max(...data.buckets.map((bucket) => bucket.count), 1) : 1
+  const buckets = data?.buckets ?? []
+  const maxCount = buckets.length > 0 ? Math.max(...buckets.map((bucket) => bucket.count), 1) : 1
 
   return (
     <InsightCard
       title="Salary Distribution"
-      description={data ? `${data.total.toLocaleString()} employees in sample` : undefined}
+      description={data ? `${data.total.toLocaleString()} employees` : undefined}
       loading={loading}
       error={error}
       onRetry={onRetry}
-      className="card-span-2"
     >
-      {data && data.buckets.length > 0 ? (
-        <div className="insight-details">
-          {data.buckets.map((bucket, index) => (
-            <div className="distribution-row" key={index}>
-              <div className="distribution-label">
-                {formatCurrency(bucket.range[0])} – {formatCurrency(bucket.range[1])}
+      {buckets.length > 0 ? (
+        <div className="distribution-grid">
+          {buckets.map((bucket, index) => (
+            <div className="distribution-cell" key={index}>
+              <div className="distribution-cell-header">
+                <span className="distribution-label">
+                  {formatCurrency(bucket.range[0])}–{formatCurrency(bucket.range[1])}
+                </span>
+                <span className="distribution-count">{bucket.count.toLocaleString()}</span>
               </div>
               <div className="distribution-track" aria-hidden="true">
                 <div
@@ -46,12 +49,11 @@ export function SalaryDistributionCard({
                   style={{ width: `${(bucket.count / maxCount) * 100}%` }}
                 />
               </div>
-              <div className="distribution-count">{bucket.count}</div>
             </div>
           ))}
         </div>
       ) : (
-        <p>No distribution data available.</p>
+        <p className="insight-empty">No distribution data available.</p>
       )}
     </InsightCard>
   )

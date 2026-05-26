@@ -103,104 +103,121 @@ export function EmployeeForm({ initialData, onSubmit, onCancel, submitLabel }: E
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="form-grid">
-          <label>
-            Name
-            <input
-              type="text"
-              value={formState.full_name}
-              onChange={(event) => handleChange('full_name', event.target.value)}
-            />
-            {errors.full_name ? <span className="field-error">{errors.full_name}</span> : null}
-          </label>
+      <form onSubmit={handleSubmit} noValidate className="employee-form">
+        <fieldset className="form-section">
+          <legend className="form-section-title">Personal information</legend>
+          <div className="form-grid">
+            <label>
+              Full name
+              <input
+                type="text"
+                value={formState.full_name}
+                onChange={(event) => handleChange('full_name', event.target.value)}
+              />
+              {errors.full_name ? <span className="field-error">{errors.full_name}</span> : null}
+            </label>
 
-          <label>
-            Email
-            <input
-              type="email"
-              value={formState.email}
-              onChange={(event) => handleChange('email', event.target.value)}
-            />
-            {errors.email ? <span className="field-error">{errors.email}</span> : null}
-          </label>
+            <label>
+              Email
+              <input
+                type="email"
+                value={formState.email}
+                onChange={(event) => handleChange('email', event.target.value)}
+              />
+              {errors.email ? <span className="field-error">{errors.email}</span> : null}
+            </label>
 
-          <label>
-            Job title
-            <input
-              type="text"
-              value={formState.job_title}
-              onChange={(event) => handleChange('job_title', event.target.value)}
-            />
-            {errors.job_title ? <span className="field-error">{errors.job_title}</span> : null}
-          </label>
+            <label>
+              Country
+              <select value={formState.country} onChange={(event) => handleChange('country', event.target.value)}>
+                {countryOptions.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+              {errors.country ? <span className="field-error">{errors.country}</span> : null}
+            </label>
+          </div>
+        </fieldset>
 
-          <label>
-            Department
-            <input
-              type="text"
-              value={formState.department}
-              onChange={(event) => handleChange('department', event.target.value)}
-            />
-            {errors.department ? <span className="field-error">{errors.department}</span> : null}
-          </label>
+        <fieldset className="form-section">
+          <legend className="form-section-title">Role & department</legend>
+          <div className="form-grid">
+            <label>
+              Job title
+              <input
+                type="text"
+                value={formState.job_title}
+                onChange={(event) => handleChange('job_title', event.target.value)}
+              />
+              {errors.job_title ? <span className="field-error">{errors.job_title}</span> : null}
+            </label>
 
-          <label>
-            Country
-            <select value={formState.country} onChange={(event) => handleChange('country', event.target.value)}>
-              {countryOptions.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            {errors.country ? <span className="field-error">{errors.country}</span> : null}
-          </label>
+            <label>
+              Department
+              <input
+                type="text"
+                value={formState.department}
+                onChange={(event) => handleChange('department', event.target.value)}
+              />
+              {errors.department ? <span className="field-error">{errors.department}</span> : null}
+            </label>
 
-          <label>
-            Salary
-            <input
-              type="number"
-              step="0.01"
-              value={formState.salary}
-              onChange={(event) => handleChange('salary', event.target.value)}
-            />
-            {errors.salary ? <span className="field-error">{errors.salary}</span> : null}
-          </label>
+            <label>
+              Employment type
+              <select
+                value={formState.employment_type}
+                onChange={(event) => handleChange('employment_type', event.target.value)}
+              >
+                {employmentTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type.replace('_', ' ')}
+                  </option>
+                ))}
+              </select>
+              {errors.employment_type ? <span className="field-error">{errors.employment_type}</span> : null}
+            </label>
+          </div>
+        </fieldset>
 
-          <label>
-            Currency
-            <input
-              type="text"
-              maxLength={3}
-              value={formState.currency}
-              onChange={(event) => handleChange('currency', event.target.value.toUpperCase())}
-            />
-            {errors.currency ? <span className="field-error">{errors.currency}</span> : null}
-          </label>
+        <fieldset className="form-section">
+          <legend className="form-section-title">Compensation & tenure</legend>
+          <div className="form-grid">
+            <label>
+              Salary (USD)
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formState.salary}
+                onChange={(event) => handleChange('salary', event.target.value)}
+              />
+              {errors.salary ? <span className="field-error">{errors.salary}</span> : null}
+            </label>
 
-          <label>
-            Employment type
-            <select value={formState.employment_type} onChange={(event) => handleChange('employment_type', event.target.value)}>
-              {employmentTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type.replace('_', ' ')}
-                </option>
-              ))}
-            </select>
-            {errors.employment_type ? <span className="field-error">{errors.employment_type}</span> : null}
-          </label>
+            <label>
+              Currency
+              <input
+                type="text"
+                maxLength={3}
+                value={formState.currency}
+                onChange={(event) => handleChange('currency', event.target.value.toUpperCase())}
+              />
+              {errors.currency ? <span className="field-error">{errors.currency}</span> : null}
+            </label>
 
-          <label>
-            Hire date
-            <input
-              type="date"
-              value={formState.hired_at}
-              onChange={(event) => handleChange('hired_at', event.target.value)}
-            />
-            {errors.hired_at ? <span className="field-error">{errors.hired_at}</span> : null}
-          </label>
-        </div>
+            <label>
+              Hire date
+              <input
+                type="date"
+                value={formState.hired_at}
+                onChange={(event) => handleChange('hired_at', event.target.value)}
+              />
+              {errors.hired_at ? <span className="field-error">{errors.hired_at}</span> : null}
+            </label>
+          </div>
+        </fieldset>
 
         <div className="form-actions">
           <button type="button" className="button-secondary" onClick={onCancel} disabled={submitting}>
@@ -210,7 +227,6 @@ export function EmployeeForm({ initialData, onSubmit, onCancel, submitLabel }: E
             {submitting ? `${submitLabel}…` : submitLabel}
           </button>
         </div>
-
       </form>
     </section>
   )

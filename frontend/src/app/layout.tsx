@@ -3,7 +3,7 @@ import { AppNav } from '../components/layout/AppNav'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SMA Incubyte Salary Management',
+  title: 'Incubyte Salary Management',
   description: 'Salary management dashboard for HR managers',
 }
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="app-shell">
           <header className="topbar">
             <div className="brand">
-              <span>SMA Incubyte</span>
+              <span>Incubyte</span>
               <small>Salary management dashboard</small>
             </div>
             <AppNav />

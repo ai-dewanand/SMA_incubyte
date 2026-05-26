@@ -19,7 +19,7 @@ export function DepartmentBreakdownCard({
   }
 
   const formatCurrency = (num: number) => `$${(num / 1000).toFixed(1)}k`
-  const rows = data ? [...data].sort((a, b) => b.avg - a.avg) : []
+  const rows = Array.isArray(data) ? [...data].sort((a, b) => b.avg - a.avg) : []
   const topDept = rows[0]
   const maxAvg = topDept?.avg ?? 1
 

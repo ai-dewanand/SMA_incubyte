@@ -18,15 +18,16 @@ export function HeadcountCard({
     return null
   }
 
-  const total = data ? data.reduce((sum, item) => sum + item.count, 0) : 0
-  const topCountries = data ? [...data].sort((a, b) => b.count - a.count).slice(0, 5) : []
+  const rows = Array.isArray(data) ? data : []
+  const total = rows.reduce((sum, item) => sum + item.count, 0)
+  const topCountries = [...rows].sort((a, b) => b.count - a.count).slice(0, 5)
   const maxCount = topCountries[0]?.count ?? 1
 
   return (
     <InsightCard
       title="Global Headcount"
       value={total.toLocaleString()}
-      description={`${data?.length ?? 0} countries`}
+      description={`${rows.length} countries`}
       loading={loading}
       error={error}
       onRetry={onRetry}

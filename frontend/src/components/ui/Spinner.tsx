@@ -5,7 +5,12 @@ type SpinnerProps = {
 
 export function Spinner({ label = 'Loading', size = 'md' }: SpinnerProps) {
   return (
-    <div className={`spinner-wrap spinner-${size}`} role="status" aria-live="polite" aria-busy="true">
+    <div
+      className={`spinner-wrap spinner-${size}${size === 'sm' ? ' spinner-wrap-compact' : ''}`}
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
       <span className="spinner" aria-hidden="true" />
       <span className="sr-only">{label}</span>
       {label ? <span className="spinner-label">{label}</span> : null}
