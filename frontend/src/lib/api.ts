@@ -57,3 +57,61 @@ export async function deleteEmployee(employeeId: string) {
     method: 'DELETE',
   })
 }
+
+// Insights API
+export async function fetchSalaryStats() {
+  return fetcher<{
+    min: number
+    max: number
+    avg: number
+  }>(`${API_BASE}/api/v1/insights/salary-stats`)
+}
+
+export async function fetchSalaryByTitle() {
+  return fetcher<
+    Array<{
+      job_title: string
+      avg_salary: number
+      count: number
+    }>
+  >(`${API_BASE}/api/v1/insights/salary-by-title`)
+}
+
+export async function fetchTopEarners(limit: number = 10) {
+  return fetcher<
+    Array<{
+      id: string
+      full_name: string
+      salary: number
+    }>
+  >(`${API_BASE}/api/v1/insights/top-earners?limit=${limit}`)
+}
+
+export async function fetchDepartmentBreakdown() {
+  return fetcher<
+    Array<{
+      department: string
+      avg: number
+    }>
+  >(`${API_BASE}/api/v1/insights/department-breakdown`)
+}
+
+export async function fetchHeadcount(country?: string) {
+  const params = country ? `?country=${country}` : ''
+  return fetcher<
+    Array<{
+      country: string
+      count: number
+    }>
+  >(`${API_BASE}/api/v1/insights/headcount${params}`)
+}
+
+export async function fetchSalaryDistribution(buckets: number = 10) {
+  return fetcher<{
+    buckets: Array<{
+      range: [number, number]
+      count: number
+    }>
+    total: number
+  }>(`${API_BASE}/api/v1/insights/salary-distribution?buckets=${buckets}`)
+}
