@@ -1,36 +1,52 @@
-import { EmployeeTable } from '../../components/employees/EmployeeTable'
+'use client'
 
-const sampleEmployees = [
-  {
-    id: '1',
-    full_name: 'Ava Hernandez',
-    email: 'ava.hernandez@example.com',
-    job_title: 'Software Engineer',
-    department: 'Engineering',
-    country: 'United States',
-    salary: '$125,000',
-  },
-  {
-    id: '2',
-    full_name: 'Noah Patel',
-    email: 'noah.patel@example.com',
-    job_title: 'Product Manager',
-    department: 'Product',
-    country: 'Canada',
-    salary: '$132,500',
-  },
-  {
-    id: '3',
-    full_name: 'Zoe Kim',
-    email: 'zoe.kim@example.com',
-    job_title: 'Data Scientist',
-    department: 'Data',
-    country: 'United Kingdom',
-    salary: '$118,000',
-  },
-]
+import { useEffect, useMemo, useState } from 'react'
+import { EmployeeTable, type EmployeeRecord } from '../../components/employees/EmployeeTable'
+import { fetchEmployees } from '../../lib/api'
+
+function formatSalary(value: unknown): string {
+  if (typeof value === 'string') {
+    const num = Number(value)
+    if (!Number.isNaN(num)) {
+      return num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+    }
+    return value
+  }
+  if (typeof value === 'number') {
+    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+  }
+  return String(value)
+}
 
 export default function EmployeesPage() {
+  const [employees, setEmployees] = useState<EmployeeRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadEmployees() {
+      try {
+        const payload = await fetchEmployees()
+        const normalized = payload.map((item: any) => ({
+          id: item.id,
+          full_name: item.full_name,
+          email: item.email,
+          job_title: item.job_title,
+          department: item.department,
+          country: item.country,
+          salary: formatSalary(item.salary),
+        }))
+        setEmployees(normalized)
+      } catch (caught) {
+        setError(caught instanceof Error ? caught.message : 'Failed to load employees')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadEmployees()
+  }, [])
+
   return (
     <main>
       <section className="page-header">
@@ -38,7 +54,17 @@ export default function EmployeesPage() {
         <p>Browse active team members and key salary details.</p>
       </section>
 
-      <EmployeeTable employees={sampleEmployees} />
+      {loading ? (
+        <div className="panel">
+          <p className="empty-state">Loading employees…</p>
+        </div>
+      ) : error ? (
+        <div className="panel">
+          <p className="empty-state">{error}</p>
+        </div>
+      ) : (
+        <EmployeeTable employees={employees} />
+      )}
     </main>
   )
 }
