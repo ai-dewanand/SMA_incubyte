@@ -1,7 +1,16 @@
+# Application
+fastapi==0.136.3
+uvicorn[standard]==0.48.0
+SQLAlchemy==2.0.50
 aiosqlite==0.22.1
 alembic==1.18.4
-fastapi==0.136.3
-pydantic==2.13.4
+pydantic[email]==2.13.4
+email-validator==2.2.0
 python-dotenv==1.2.2
-SQLAlchemy==2.0.50
-uvicorn==0.48.0
+greenlet==3.1.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+httpx==0.28.1
