@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.employees import router as employees_router
+from app.api.v1.insights import router as insights_router
 
 
 def create_app() -> FastAPI:
@@ -17,6 +18,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(employees_router)
+    app.include_router(insights_router)
     return app
 
 
