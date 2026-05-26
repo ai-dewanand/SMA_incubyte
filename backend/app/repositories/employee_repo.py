@@ -14,8 +14,15 @@ class EmployeeRepository(BaseRepository[Employee, EmployeeCreate, EmployeeUpdate
     def __init__(self) -> None:
         super().__init__(Employee)
 
+    async def get(self, db: AsyncSession, object_id: str) -> Optional[Employee]:
+        stmt = select(Employee).where(
+            Employee.id == object_id,
+            Employee.is_active == True,
+        )
+        result = await db.execute(stmt)
+        return result.scalars().first()
+
     async def list(self, db: AsyncSession, limit: int = 100, offset: int = 0) -> List[Employee]:
-        # By default only return active employees
         stmt = select(Employee).where(Employee.is_active == True).limit(limit).offset(offset)
         result = await db.execute(stmt)
         return result.scalars().all()
@@ -27,4 +34,6 @@ class EmployeeRepository(BaseRepository[Employee, EmployeeCreate, EmployeeUpdate
             .values(is_active=False)
         )
         await db.commit()
-        return await self.get(db, employee_id)
+
+        result = await db.execute(select(Employee).where(Employee.id == employee_id))
+        return result.scalars().first()
